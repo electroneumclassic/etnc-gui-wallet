@@ -24,7 +24,8 @@ namespace electroneum_classic_csharp
             InitializeComponent();
         }
 
-        private void Success() {
+        private void Success()
+        {
 
             EventHandler handler = OpenSuccess;
             if (handler != null)
@@ -36,10 +37,15 @@ namespace electroneum_classic_csharp
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            string password = "";
+            if (InputBox.Show("Set up a wallet password (default no-password)",
+                "", ref password) != DialogResult.OK)
+            {
+                return;
+            }
+
             try
             {
-                lblPassword.ForeColor = Color.Black;
-
                 //browse
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -60,12 +66,12 @@ namespace electroneum_classic_csharp
                 Cursor.Current = Cursors.WaitCursor;
 
                 //create wallet
-                util.wallet.Create(sfd.FileName, txtPassword.Text.Trim());
+                util.wallet.Create(sfd.FileName, password);
 
                 Cursor.Current = Cursors.Default;
 
                 WalletFilename = sfd.FileName;
-                //WalletPassword = txtPassword.Text;
+                WalletPassword = password;
 
                 this.Success();
             }
@@ -74,16 +80,21 @@ namespace electroneum_classic_csharp
 
                 Cursor.Current = Cursors.Default;
                 log.logger.write(ex.Message, true);
-                MessageBox.Show(ex.Message, "etnc", MessageBoxButtons.OK, MessageBoxIcon.Error);                
+                MessageBox.Show(ex.Message, "etnc", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
+            string password = "";
+            if (InputBox.Show("Enter your password (default no-password)",
+                "", ref password) != DialogResult.OK)
+            {
+                return;
+            }
+
             try
             {
-                lblPassword.ForeColor = Color.Black;
-
                 OpenFileDialog ofd = new OpenFileDialog();
                 ofd.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 ofd.RestoreDirectory = true;
@@ -93,10 +104,8 @@ namespace electroneum_classic_csharp
                     return;
                 }
 
-                //txtPassword.Focus();
-                //lblPassword.Text = "PASSWORD for " + Path.GetFileName(ofd.FileName) + " ";
-
                 WalletFilename = ofd.FileName;
+                WalletPassword = password;
 
                 this.Success();
             }
@@ -104,38 +113,6 @@ namespace electroneum_classic_csharp
             {
                 log.logger.write("Open : " + ex.Message, true);
             }
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (txtPassword.Text.Trim() == "")
-                {
-                    lblPassword.Text = lblPassword.Text + " (required)";
-                    lblPassword.ForeColor = Color.Red;
-                    txtPassword.Focus();
-                    return;
-                }
-                
-                WalletPassword = txtPassword.Text;
-                this.Success();
-            }
-            catch (Exception ex)
-            {
-                log.logger.write("OK : " + ex.Message, true);
-            }
-
-        }
-
-        private void txtPassword_TextChanged(object sender, EventArgs e)
-        {
-            if (lblPassword.Text.Contains("required"))
-            {
-                lblPassword.Text = lblPassword.Text.Replace("(required)", "").Trim();
-            }
-
-            lblPassword.ForeColor = Color.Black;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -154,10 +131,15 @@ namespace electroneum_classic_csharp
                 return;
             }
 
+            string password = "";
+            if (InputBox.Show("Set a wallet password (default no-password)",
+                "", ref password) != DialogResult.OK)
+            {
+                return;
+            }
+
             try
             {
-                lblPassword.ForeColor = Color.Black;
-
                 //browse
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -178,12 +160,12 @@ namespace electroneum_classic_csharp
                 Cursor.Current = Cursors.WaitCursor;
 
                 //create wallet
-                util.wallet.CreateFromMnemonic(sfd.FileName, mnemonic_seed, restore_height);
+                util.wallet.CreateFromMnemonic(sfd.FileName, password, mnemonic_seed, restore_height);
 
                 Cursor.Current = Cursors.Default;
 
                 WalletFilename = sfd.FileName;
-                //WalletPassword = txtPassword.Text;
+                WalletPassword = password;
 
                 this.Success();
             }

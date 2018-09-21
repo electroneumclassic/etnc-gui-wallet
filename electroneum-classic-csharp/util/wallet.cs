@@ -38,10 +38,11 @@ namespace electroneum_classic_csharp.util
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
 
-                var arg = string.Format("--daemon-address {0}:{1} --generate-new-wallet {2} --password \"\" --mnemonic-language English --allow-mismatched-daemon-version",
+                var arg = string.Format("--daemon-address {0}:{1} --generate-new-wallet {2} --password \"{3}\" --mnemonic-language English --allow-mismatched-daemon-version",
                                          remote_daemon_host,
                                          remote_daemon_port,
-                                         filename);
+                                         filename,
+                                         password);
 
                 process.StartInfo.Arguments = arg;
                 process.OutputDataReceived += outputDataReceived;
@@ -66,7 +67,7 @@ namespace electroneum_classic_csharp.util
             }
         }
 
-        public static void CreateFromMnemonic(string filename, string mnemonic_seed, string restore_height)
+        public static void CreateFromMnemonic(string filename, string password, string mnemonic_seed, string restore_height)
         {
             try
             {
@@ -79,10 +80,11 @@ namespace electroneum_classic_csharp.util
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
 
-                var arg = string.Format("--daemon-address {0}:{1} --generate-new-wallet {2} --password \"\" --restore-deterministic-wallet",
+                var arg = string.Format("--daemon-address {0}:{1} --generate-new-wallet {2} --password \"{3}\" --restore-deterministic-wallet",
                                          remote_daemon_host,
                                          remote_daemon_port,
-                                         filename);
+                                         filename,
+                                         password);
 
                 process.StartInfo.Arguments = arg;
                 process.OutputDataReceived += outputDataReceived;
@@ -134,10 +136,11 @@ namespace electroneum_classic_csharp.util
                 processWalletRpc.StartInfo.RedirectStandardError = true;
 
                 //filename = Path.ChangeExtension(filename, null);
-                var arg = string.Format("--daemon-address {0}:{1} --wallet-file \"{2}\" --password \"\" --rpc-bind-port 26980 --rpc-login etnc:etnc",
+                var arg = string.Format("--daemon-address {0}:{1} --wallet-file \"{2}\" --password \"{3}\" --rpc-bind-port 26980 --rpc-login etnc:etnc",
                                          remote_daemon_host,
                                          remote_daemon_port,
-                                         filename);
+                                         filename,
+                                         password);
 
                 processWalletRpc.StartInfo.Arguments = arg;
                 processWalletRpc.OutputDataReceived += outputDataReceived;
